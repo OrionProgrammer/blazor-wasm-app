@@ -1,0 +1,88 @@
+﻿@page "/"
+@using Campus.Client.Services.Interfaces
+@using Campus.Model
+@using Newtonsoft.Json
+@using Microsoft.JSInterop
+@inject HttpClient Http
+@inject IStudentService _studentService
+@inject IJSRuntime js
+
+<PageTitle>Available Courses</PageTitle>
+
+<AuthorizeView>
+    <Authorized>
+        <h5>Hello, @context.User.Identity.Name!</h5>
+    </Authorized>
+    <NotAuthorized>
+        <h5>Hello, Guest!</h5>
+    </NotAuthorized>
+</AuthorizeView>
+
+<hr />
+
+<h4>Available Courses</h4>
+
+@if (courseModels is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="card-group">
+    <Virtualize Items="courseModels" Context="course">
+            <div class="card" style="width: 10rem;">
+                <img src="/course-image.jpg" class="card-img-top responsive" alt="">
+                 <div class="card-body">
+                     <h5 class="card-title">@course.Name</h5>
+                     <p class="card-text">@course.Details</p>
+                </div>
+                <div class="card-footer">
+                    <a href="" @onclick="()=>Register(course.CourseId)" @onclick:preventDefault class="btn btn-primary">Register</a>
+                </div>
+            </div>
+    </Virtualize>
+    </div>
+}
+
+@error
+
+@code {
+    private List<CourseModel>? courseModels;
+    private string error = "";
+
+    protected override async Task OnInitializedAsync()
+    {
+        try
+        {
+            var response = await Http.GetAsync("Course");
+            var returnValue = await response.Content.ReadAsStringAsync();
+            courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
+        }
+        catch(Exception ex)
+        {
+            error = ex.Message;
+        }
+    }
+
+    public async void Register(int courseId)
+    {
+        //get studentId from Sessions object
+        var userSessionModel = await _studentService.GetUserSessionModel();
+
+        if(userSessionModel is { })
+        {
+            //process registration
+
+            StudentCourseModel studentCourseModel = new StudentCourseModel
+            {
+                StudentId = userSessionModel.UserId,
+                CourseId = courseId
+            };
+
+            await _studentService.Register(studentCourseModel);
+
+            //display a message using jsInterop to invoke the browser native alert box
+            await js.InvokeVoidAsync("alert", "You have successfully resgistered for the course");
+        }
+    }
+}

@@ -1,0 +1,66 @@
+﻿@page "/account/courses"
+
+@using Newtonsoft.Json
+@using Campus.Client.Services.Interfaces
+@using Campus.Model
+@inject IStudentService _studentService
+@inject HttpClient Http
+@inject IJSRuntime js
+
+<h3>Courses</h3>
+
+@if (courseModels is null)
+{
+    <p><em>Loading...</em></p>
+}
+else
+{
+    <div class="card-group">
+        <Virtualize Items="courseModels" Context="course">
+            <div class="card" style="width: 18rem;">
+                <img src="/course-image.jpg" class="Card image cap" alt="">
+                <div class="card-body">
+                    <h5 class="card-title">@course.Name</h5>
+                    <p class="card-text">@course.Details</p>
+                </div>
+                <div class="card-footer">
+                    <a href="" @onclick="()=>DeRegister(course.CourseId)" @onclick:preventDefault class="btn btn-danger">De-Register</a>
+                </div>
+            </div>
+        </Virtualize>
+    </div>
+}
+
+@code {
+    private List<StudentCourseModel>? studentCourses;
+    private List<CourseModel>? courseModels;
+
+    protected override async Task OnInitializedAsync()
+    {
+        await LoadCourse();    
+    }
+
+    private async Task LoadCourse()
+    {
+        //load course
+        var response = await Http.GetAsync("Course");
+        var returnValue = await response.Content.ReadAsStringAsync();
+        courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
+
+        var userSessionModel = await _studentService.GetUserSessionModel();
+        studentCourses = new List<StudentCourseModel>();
+        studentCourses = await _studentService.FetchMyCourses(userSessionModel.UserId);
+        courseModels = courseModels.Where(x => studentCourses.Any(c => c.CourseId == x.CourseId)).ToList();
+    }
+
+    public async void DeRegister(int courseId)
+    {
+        await _studentService.DeRegister(courseId);
+        StateHasChanged();
+        //display a message using jsInterop to invoke the browser native alert box
+        await js.InvokeVoidAsync("alert", "You have successfully de-resgistered from the course");
+
+        //reload courses
+        await LoadCourse();
+    }
+}

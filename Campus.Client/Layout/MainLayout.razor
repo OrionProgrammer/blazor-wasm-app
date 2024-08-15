@@ -1,0 +1,48 @@
+﻿@inherits LayoutComponentBase
+@using Campus.Client.Helpers
+@inject AuthenticationStateProvider authStateProvider
+@inject NavigationManager navManager
+
+<div class="page">
+
+    <AuthorizeView>
+        <Authorized>
+            <div class="sidebar">
+                <NavMenu />
+            </div>
+        </Authorized>
+    </AuthorizeView>
+
+    <main>
+        <div class="top-row px-4">
+            <AuthorizeView>
+                <Authorized>
+                    <a href="" @onclick="@Logout" @onclick:preventDefault>Logout</a>
+                </Authorized>
+                <NotAuthorized>
+                    <NavLink class="nav-link" href="login">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Login
+                    </NavLink>
+                    <NavLink class="nav-link" href="register">
+                        <span class="oi oi-list-rich" aria-hidden="true"></span> Register
+                    </NavLink>
+                </NotAuthorized>
+            </AuthorizeView>
+        </div>
+
+        <article class="content px-4">
+            @Body
+        </article>
+    </main>
+</div>
+
+
+@code{
+    public async void Logout()
+    {
+        //reove session variables and redirect to home page
+        var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+        await customAuthStateProvider.UpdateAuthenticationState(null);
+        navManager.NavigateTo("/", true);
+    }
+}
