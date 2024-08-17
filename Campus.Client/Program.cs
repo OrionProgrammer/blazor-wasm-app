@@ -1,4 +1,5 @@
 using Blazored.SessionStorage;
+using Campus.API.Helpers;
 using Campus.Client;
 using Campus.Client.Helpers;
 using Campus.Client.Services;
@@ -11,9 +12,12 @@ var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
+//Get API Url from AppSettings
+var appSettingsSection = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+
 builder.Services.AddScoped(sp => new HttpClient 
 {
-    BaseAddress = new Uri(Configs.ApiUrl)
+    BaseAddress = new Uri(appSettingsSection.APIUrl)
 });
 
 //add service dependencies
