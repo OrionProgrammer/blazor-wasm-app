@@ -5,6 +5,7 @@
 @using Microsoft.JSInterop
 @inject HttpClient Http
 @inject IStudentService _studentService
+@inject IAccountService _accountService
 @inject IJSRuntime js
 
 <PageTitle>Available Courses</PageTitle>
@@ -37,32 +38,70 @@ else
                      <p class="card-text">@course.Details</p>
                 </div>
                 <div class="card-footer">
-                    <a href="" @onclick="()=>Register(course.CourseId)" @onclick:preventDefault class="btn btn-primary">Register</a>
+                    @if (IsStudentRegisteredForCourse(course.CourseId))
+                    {
+                        <label class="bg-green">Enrolled</label>
+                    }
+                    else
+                    {
+                        <a href="" @onclick="()=>Register(course.CourseId)" @onclick:preventDefault class="btn btn-primary">Register</a>                        
+                    }
                 </div>
             </div>
     </Virtualize>
     </div>
 }
 
-@error
-
 @code {
     private List<CourseModel>? courseModels;
+    private List<StudentCourseModel>? studentCourses;
     private string error = "";
 
     protected override async Task OnInitializedAsync()
     {
         try
         {
-            var response = await Http.GetAsync("Course");
-            var returnValue = await response.Content.ReadAsStringAsync();
-            courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
+            await GetStudentCourses();
+            await LoadAllCourses();
+
         }
         catch(Exception ex)
         {
             error = ex.Message;
         }
     }
+
+    private async Task LoadAllCourses()
+    {
+        var response = await Http.GetAsync("Course");
+        var returnValue = await response.Content.ReadAsStringAsync();
+        courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
+    }
+
+    private async Task GetStudentCourses()
+    {
+        //logged in, the let's get all course the student is registered for
+        if (await _accountService.IsLogedIn())
+        {
+            //fetch sudents registered course
+            var userSessionModel = await _studentService.GetUserSessionModel();
+            studentCourses = new List<StudentCourseModel>();
+            studentCourses = await _studentService.FetchMyCourses(userSessionModel.UserId);
+        }
+    }
+
+    private bool IsStudentRegisteredForCourse(int courseId)
+    {
+        try
+        {
+            bool exists = studentCourses.Exists(x => x.CourseId == courseId);
+        }
+        catch
+        {}
+
+        return studentCourses is { } ? studentCourses.Exists(x => x.CourseId == courseId) : false;
+    }
+
 
     public async void Register(int courseId)
     {

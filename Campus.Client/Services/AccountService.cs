@@ -4,14 +4,20 @@ using System.Net.Http.Json;
 using System.Runtime.CompilerServices;
 using Campus.Client.Services.Interfaces;
 using Campus.Model;
+using Microsoft.AspNetCore.Components.Authorization;
+using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
+using Campus.Client.Helpers;
 
 namespace Campus.Client.Services
 {
     public class AccountService : IAccountService
     {
+        [Inject] AuthenticationStateProvider? authStateProvider { get; set; }
+
         private readonly HttpClient _httpClient;
         private readonly ISecurityService _securityService;
+        
         public AccountService(HttpClient httpClient,
                               ISecurityService securityService)
         {
@@ -50,6 +56,17 @@ namespace Campus.Client.Services
             var response = await _httpClient.PostAsJsonAsync("account/register", studentModel);
 
             return response.IsSuccessStatusCode;
+        }
+
+        public async Task<bool> IsLogedIn()
+        {
+            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+            var authState  =await customAuthStateProvider.GetAuthenticationStateAsync();
+            var user = authState.User;
+
+            bool isLoggedIn = user.Identity != null && user.Identity.IsAuthenticated;
+
+            return isLoggedIn;
         }
     }
 }
