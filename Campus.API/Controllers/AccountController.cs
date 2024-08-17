@@ -4,7 +4,6 @@ using Campus.API.Helpers;
 using Campus.Model;
 using Campus.Repository.Helpers;
 using Microsoft.AspNetCore.Authorization;
-using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;

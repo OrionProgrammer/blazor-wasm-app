@@ -26,6 +26,7 @@ namespace Campus.Client.Services
             _httpClient.DefaultRequestHeaders.Add("X-CSRF-TOKEN", await _securityService.GetAntiforgeryToken());
         }
 
+        //login to account
         public async Task<UserSessionModel> Login(LoginModel loginModel)
         {
             AddAntiforgeryToken();
@@ -37,9 +38,14 @@ namespace Campus.Client.Services
             return studentModel;
         }
 
+        //register an account
         public async Task<bool> Register(StudentModel studentModel)
         {
             AddAntiforgeryToken();
+
+            // Hash the password before sending it to the server
+            var hashedPassword = BCrypt.Net.BCrypt.HashPassword(studentModel.Password);
+            studentModel.Password = hashedPassword;
 
             var response = await _httpClient.PostAsJsonAsync("account/register", studentModel);
 

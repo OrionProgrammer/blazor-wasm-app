@@ -57,6 +57,7 @@ namespace Campus.Client.Services
             return entities;
         }
 
+        //register for a course
         public async Task<bool> Register(StudentCourseModel studentCourseModel)
         {
             AddAntiforgeryToken();
@@ -65,6 +66,7 @@ namespace Campus.Client.Services
             return response.IsSuccessStatusCode;
         }
 
+        //de-register from a course
         public async Task<UserSessionModel> GetUserSessionModel()
         {
             return await _sessionStorage.ReadEncryptedItemAsync<UserSessionModel>("UserSession");
