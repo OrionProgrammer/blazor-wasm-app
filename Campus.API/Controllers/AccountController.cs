@@ -4,6 +4,7 @@ using Campus.API.Helpers;
 using Campus.Model;
 using Campus.Repository.Helpers;
 using Microsoft.AspNetCore.Authorization;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
@@ -42,8 +43,22 @@ public class AccountController : BaseController
         if (!ModelState.IsValid)
             return BadRequest(new { errors = GetErrors() });
 
-        var user = _unitOfWork.StudentRepository.Authenticate(model.Email, model.Password);
+        var user = await _unitOfWork.StudentRepository.GetByUsername(model.Email);
         await _unitOfWork.Complete();
+
+        if (user is null)
+        {
+            return BadRequest("Invalid username");
+        }
+
+        // Verify the password
+        var passwordValid = BCrypt.Net.BCrypt.Verify(model.Password, user.Password);
+
+        if (!passwordValid)
+        {
+            return BadRequest("Invalid password");
+        }
+
 
         if (user is null)
         {

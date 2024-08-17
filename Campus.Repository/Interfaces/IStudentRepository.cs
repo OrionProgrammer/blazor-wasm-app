@@ -5,6 +5,6 @@ namespace Campus.Repository.Interfaces { }
 
 public interface IStudentRepository : IGenericRepository<Student>
 {
-    Student Authenticate(string email, string password);
+    Task<Student> GetByUsername(string email);
 }
 
