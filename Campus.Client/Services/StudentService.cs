@@ -3,7 +3,6 @@ using Campus.Client.Helpers;
 using Campus.Client.Services.Interfaces;
 using Campus.Model;
 using Newtonsoft.Json;
-using System;
 using System.Net.Http.Json;
 
 namespace Campus.Client.Services

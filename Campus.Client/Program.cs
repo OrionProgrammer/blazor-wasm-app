@@ -19,6 +19,7 @@ builder.Services.AddScoped(sp => new HttpClient
 //add service dependencies
 builder.Services.AddScoped<IAccountService, AccountService>();
 builder.Services.AddScoped<IStudentService, StudentService>();
+builder.Services.AddScoped<ISecurityService, SecurityService>();
 builder.Services.AddBlazoredSessionStorage();
 builder.Services.AddScoped<AuthenticationStateProvider, CustomAuthenticationStateProvider>();
 builder.Services.AddAuthorizationCore();
