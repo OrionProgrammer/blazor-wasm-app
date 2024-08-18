@@ -25,18 +25,9 @@ namespace Campus.Client.Services
             _securityService = securityService;
         }
 
-        //Method inlined to be faster
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private async void AddAntiforgeryToken()
-        {
-            _httpClient.DefaultRequestHeaders.Add("X-CSRF-TOKEN", await _securityService.GetAntiforgeryToken());
-        }
-
         //login to account
         public async Task<UserSessionModel> Login(LoginModel loginModel)
         {
-            AddAntiforgeryToken();
-
             var response = await _httpClient.PostAsJsonAsync("account/login", loginModel);
             var returnValue = await response.Content.ReadAsStringAsync();
             UserSessionModel studentModel = JsonConvert.DeserializeObject<UserSessionModel>(returnValue);
@@ -47,8 +38,6 @@ namespace Campus.Client.Services
         //register an account
         public async Task<bool> Register(StudentModel studentModel)
         {
-            AddAntiforgeryToken();
-
             // Hash the password before sending it to the server
             var hashedPassword = BCrypt.Net.BCrypt.HashPassword(studentModel.Password);
             studentModel.Password = hashedPassword;

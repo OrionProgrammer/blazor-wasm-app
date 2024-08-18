@@ -98,7 +98,6 @@ app.UseCors(x => x
 // global error handler
 app.UseMiddleware<ExceptionHandler>();
 
-
 app.UseHttpsRedirection();
 
 app.UseAuthorization();

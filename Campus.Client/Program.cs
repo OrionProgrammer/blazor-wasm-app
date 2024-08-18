@@ -17,7 +17,7 @@ var appSettingsSection = builder.Configuration.GetSection("AppSettings").Get<App
 
 builder.Services.AddScoped(sp => new HttpClient 
 {
-    BaseAddress = new Uri(appSettingsSection.APIUrl)
+    BaseAddress = new Uri("http://localhost:5292/api/")
 });
 
 //add service dependencies

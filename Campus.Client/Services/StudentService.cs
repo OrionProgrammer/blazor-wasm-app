@@ -25,25 +25,14 @@ namespace Campus.Client.Services
             _sessionStorage = sessionStorage;
         }
 
-        //Method inlined to be faster
-        [MethodImpl(MethodImplOptions.AggressiveInlining)]
-        private async void AddAntiforgeryToken()
-        {
-            _httpClient.DefaultRequestHeaders.Add("X-CSRF-TOKEN", await _securityService.GetAntiforgeryToken());
-        }
-
         public async Task<bool> DeRegister(int courseId)
         {
-            AddAntiforgeryToken();
-
             var response = await _httpClient.DeleteAsync($"student/{courseId}");
             return response.IsSuccessStatusCode;
         }
 
         public async Task<List<StudentCourseModel>> FetchMyCourses(string studentId)
         {
-            AddAntiforgeryToken();
-
             var entities = new List<StudentCourseModel>();
 
             var response = await _httpClient.GetAsync($"student/list/{studentId}");
@@ -60,8 +49,6 @@ namespace Campus.Client.Services
         //register for a course
         public async Task<bool> Register(StudentCourseModel studentCourseModel)
         {
-            AddAntiforgeryToken();
-
             var response = await _httpClient.PostAsJsonAsync("student/register", studentCourseModel);
             return response.IsSuccessStatusCode;
         }

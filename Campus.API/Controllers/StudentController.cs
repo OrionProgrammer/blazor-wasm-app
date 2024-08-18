@@ -21,7 +21,6 @@ namespace Campus.API.Controllers
 
         //register
         [AllowAnonymous]
-        [ValidateAntiForgeryToken]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
@@ -52,7 +51,6 @@ namespace Campus.API.Controllers
 
         //de-regster
         [HttpDelete("{id}")]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status500InternalServerError)]

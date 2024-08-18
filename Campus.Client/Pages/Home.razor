@@ -29,27 +29,29 @@
 }
 else
 {
-    <div class="card-group">
-    <Virtualize Items="courseModels" Context="course">
-            <div class="card" style="width: 10rem;">
-                <img src="/course-image.jpg" class="card-img-top responsive" alt="">
-                 <div class="card-body">
-                     <h5 class="card-title">@course.Name</h5>
-                     <p class="card-text">@course.Details</p>
+    <div class="container mt-4">
+    <div class="row">
+            <Virtualize Items="courseModels" Context="course">
+                <div class="col-md-4 mb-4">
+                    <img src="/course-image.jpg" class="img-responsive" width="100%" alt="">
+                    <div class="card-body">
+                        <h5 class="card-title">@course.Name</h5>
+                        <p class="card-text">@course.Details</p>
+                    </div>
+                    <div class="card-footer">
+                        @if (IsStudentRegisteredForCourse(course.CourseId))
+                        {
+                            <label class="bg-green">Enrolled</label>
+                        }
+                        else
+                        {
+                            <a href="" @onclick="()=>Register(course.CourseId)" @onclick:preventDefault class="btn btn-primary">Register</a>
+                        }
+                    </div>
                 </div>
-                <div class="card-footer">
-                    @if (IsStudentRegisteredForCourse(course.CourseId))
-                    {
-                        <label class="bg-green">Enrolled</label>
-                    }
-                    else
-                    {
-                        <a href="" @onclick="()=>Register(course.CourseId)" @onclick:preventDefault class="btn btn-primary">Register</a>                        
-                    }
-                </div>
-            </div>
-    </Virtualize>
+            </Virtualize>
     </div>
+</div>
 }
 
 @code {
@@ -61,7 +63,7 @@ else
     {
         try
         {
-            await GetStudentCourses();
+            //await GetStudentCourses();
             await LoadAllCourses();
 
         }

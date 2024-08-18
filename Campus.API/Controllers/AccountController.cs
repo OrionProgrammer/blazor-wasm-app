@@ -32,7 +32,6 @@ public class AccountController : BaseController
     }
 
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
     [HttpPost("login")]
     [ProducesResponseType(typeof(JsonResult), StatusCodes.Status200OK)]
     [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
@@ -97,7 +96,6 @@ public class AccountController : BaseController
     
 
     [AllowAnonymous]
-    [ValidateAntiForgeryToken]
     [HttpPost("register")]
     [ProducesResponseType(StatusCodes.Status201Created)]
     [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
