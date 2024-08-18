@@ -35,6 +35,7 @@ namespace Campus.Client.Services
             }
         }
 
+        //de-register from aa course
         public async Task<bool> DeRegister(int courseId)
         {
             AddJWTToken();
@@ -43,6 +44,7 @@ namespace Campus.Client.Services
             return response.IsSuccessStatusCode;
         }
 
+        //getch all courses for student
         public async Task<List<StudentCourseModel>> FetchMyCourses(string studentId)
         {
             AddJWTToken();
