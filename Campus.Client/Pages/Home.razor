@@ -86,7 +86,7 @@ else
         if (await _accountService.IsLogedIn())
         {
             //fetch sudents registered course
-            var userSessionModel = await _studentService.GetUserSessionModel();
+            var userSessionModel = await _accountService.GetUserSessionModel();
             studentCourses = new List<StudentCourseModel>();
             studentCourses = await _studentService.FetchMyCourses(userSessionModel.UserId);
         }
@@ -108,7 +108,7 @@ else
     public async void Register(int courseId)
     {
         //get studentId from Sessions object
-        var userSessionModel = await _studentService.GetUserSessionModel();
+        var userSessionModel = await _accountService.GetUserSessionModel();
 
         if(userSessionModel is { })
         {
