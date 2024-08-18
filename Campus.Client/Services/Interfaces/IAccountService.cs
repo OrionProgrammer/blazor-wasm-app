@@ -8,5 +8,6 @@ namespace Campus.Client.Services.Interfaces
         Task<bool> Register(StudentModel studentModel);
         Task<bool> IsLogedIn();
         Task<UserSessionModel> GetUserSessionModel();
+        Task<string> GetUserJWTToken();
     }
 }

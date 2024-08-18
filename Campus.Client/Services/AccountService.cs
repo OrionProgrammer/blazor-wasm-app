@@ -66,5 +66,11 @@ namespace Campus.Client.Services
         {
             return await _sessionStorage.ReadEncryptedItemAsync<UserSessionModel>("UserSession");
         }
+
+        public async Task<string> GetUserJWTToken()
+        {
+            var user = await _sessionStorage.ReadEncryptedItemAsync<UserSessionModel>("UserSession");
+            return user.Token;
+        }
     }
 }
