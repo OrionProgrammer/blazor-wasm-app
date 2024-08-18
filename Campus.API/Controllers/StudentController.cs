@@ -5,6 +5,7 @@ using Microsoft.AspNetCore.Mvc;
 
 namespace Campus.API.Controllers
 {
+    [Authorize]
     [Route("api/[controller]")]
     [ApiController]
     public class StudentController : BaseController
@@ -20,7 +21,6 @@ namespace Campus.API.Controllers
         }
 
         //register
-        [AllowAnonymous]
         [HttpPost("register")]
         [ProducesResponseType(StatusCodes.Status201Created)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
@@ -69,7 +69,6 @@ namespace Campus.API.Controllers
 
         //my-course-list
         [HttpGet("list/{id}")]
-        [ValidateAntiForgeryToken]
         [ProducesResponseType(StatusCodes.Status200OK)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status400BadRequest)]
         [ProducesResponseType(typeof(JsonResult), StatusCodes.Status500InternalServerError)]

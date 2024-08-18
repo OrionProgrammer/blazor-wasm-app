@@ -1,28 +1,19 @@
-﻿using Blazored.SessionStorage;
-using Campus.Client.Helpers;
-using Campus.Client.Services.Interfaces;
-using Campus.Model;
+﻿using Campus.Client.Services.Interfaces;
 using Newtonsoft.Json;
-using Newtonsoft.Json.Linq;
-using System.Net.Http;
 using System.Net.Http.Json;
-using System.Runtime.CompilerServices;
 
 namespace Campus.Client.Services
 {
     public class StudentService : IStudentService
     {
         private readonly HttpClient _httpClient;
-        private readonly ISessionStorageService _sessionStorage;
         private readonly ISecurityService _securityService;
 
         public StudentService(HttpClient httpClient,
-                              ISessionStorageService sessionStorage,
                               ISecurityService securityService)
         {
             _httpClient = httpClient;
             _securityService = securityService;
-            _sessionStorage = sessionStorage;
         }
 
         public async Task<bool> DeRegister(int courseId)
@@ -51,12 +42,6 @@ namespace Campus.Client.Services
         {
             var response = await _httpClient.PostAsJsonAsync("student/register", studentCourseModel);
             return response.IsSuccessStatusCode;
-        }
-
-        //de-register from a course
-        public async Task<UserSessionModel> GetUserSessionModel()
-        {
-            return await _sessionStorage.ReadEncryptedItemAsync<UserSessionModel>("UserSession");
         }
     }
 }

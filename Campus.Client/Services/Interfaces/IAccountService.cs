@@ -7,5 +7,6 @@ namespace Campus.Client.Services.Interfaces
         Task<UserSessionModel> Login(LoginModel loginModel);
         Task<bool> Register(StudentModel studentModel);
         Task<bool> IsLogedIn();
+        Task<UserSessionModel> GetUserSessionModel();
     }
 }

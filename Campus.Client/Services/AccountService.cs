@@ -8,6 +8,7 @@ using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components;
 using Newtonsoft.Json;
 using Campus.Client.Helpers;
+using Blazored.SessionStorage;
 
 namespace Campus.Client.Services
 {
@@ -17,12 +18,15 @@ namespace Campus.Client.Services
 
         private readonly HttpClient _httpClient;
         private readonly ISecurityService _securityService;
-        
+        private readonly ISessionStorageService _sessionStorage;
+
         public AccountService(HttpClient httpClient,
-                              ISecurityService securityService)
+                              ISecurityService securityService,
+                              ISessionStorageService sessionStorage)
         {
             _httpClient = httpClient;
             _securityService = securityService;
+            _sessionStorage = sessionStorage;
         }
 
         //login to account
@@ -56,6 +60,11 @@ namespace Campus.Client.Services
             bool isLoggedIn = user.Identity != null && user.Identity.IsAuthenticated;
 
             return isLoggedIn;
+        }
+
+        public async Task<UserSessionModel> GetUserSessionModel()
+        {
+            return await _sessionStorage.ReadEncryptedItemAsync<UserSessionModel>("UserSession");
         }
     }
 }
