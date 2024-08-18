@@ -4,6 +4,7 @@
 @using Campus.Client.Services.Interfaces
 @using Campus.Model
 @inject IStudentService _studentService
+@inject IAccountService _accountService
 @inject HttpClient Http
 @inject IJSRuntime js
 
@@ -47,7 +48,7 @@ else
         var returnValue = await response.Content.ReadAsStringAsync();
         courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
 
-        var userSessionModel = await _studentService.GetUserSessionModel();
+        var userSessionModel = await _accountService.GetUserSessionModel();
         studentCourses = new List<StudentCourseModel>();
         studentCourses = await _studentService.FetchMyCourses(userSessionModel.UserId);
         courseModels = courseModels.Where(x => studentCourses.Any(c => c.CourseId == x.CourseId)).ToList();

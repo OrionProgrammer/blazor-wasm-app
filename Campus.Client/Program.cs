@@ -7,17 +7,24 @@ using Campus.Client.Services.Interfaces;
 using Microsoft.AspNetCore.Components.Authorization;
 using Microsoft.AspNetCore.Components.Web;
 using Microsoft.AspNetCore.Components.WebAssembly.Hosting;
+using Microsoft.Extensions.DependencyInjection;
 
 var builder = WebAssemblyHostBuilder.CreateDefault(args);
 builder.RootComponents.Add<App>("#app");
 builder.RootComponents.Add<HeadOutlet>("head::after");
 
 //Get API Url from AppSettings
-var appSettingsSection = builder.Configuration.GetSection("AppSettings").Get<AppSettings>();
+//builder.Configuration.AddJsonFile(Path.Combine(builder.HostEnvironment.BaseAddress, "/appSettings.json"), optional: false, reloadOnChange: true);
 
-builder.Services.AddScoped(sp => new HttpClient 
+//builder.Services.AddScoped(sp => new HttpClient 
+//{
+//    //BaseAddress = new Uri("http://localhost:5292/api/")
+//    BaseAddress = new Uri(builder.Configuration["APIUrl"])
+//});
+
+builder.Services.AddHttpClient("BaseHttp", httpClient =>
 {
-    BaseAddress = new Uri("http://localhost:5292/api/")
+    httpClient.BaseAddress = new Uri(builder.Configuration["BaseApiUrl"]);
 });
 
 //add service dependencies

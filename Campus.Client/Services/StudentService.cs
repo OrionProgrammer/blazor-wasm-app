@@ -1,4 +1,5 @@
-﻿using Campus.Client.Services.Interfaces;
+﻿using Campus.Client.Helpers;
+using Campus.Client.Services.Interfaces;
 using Newtonsoft.Json;
 using System.Formats.Asn1;
 using System.Net.Http.Json;
@@ -9,15 +10,12 @@ namespace Campus.Client.Services
     public class StudentService : IStudentService
     {
         private readonly HttpClient _httpClient;
-        private readonly ISecurityService _securityService;
-        private readonly AccountService _accountService;
+        private readonly IAccountService _accountService;
 
         public StudentService(HttpClient httpClient,
-                              ISecurityService securityService,
-                              AccountService accountService)
+                              IAccountService accountService)
         {
             _httpClient = httpClient;
-            _securityService = securityService;
             _accountService = accountService;
         }
 

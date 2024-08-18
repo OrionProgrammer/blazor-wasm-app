@@ -17,15 +17,12 @@ namespace Campus.Client.Services
         [Inject] AuthenticationStateProvider? authStateProvider { get; set; }
 
         private readonly HttpClient _httpClient;
-        private readonly ISecurityService _securityService;
         private readonly ISessionStorageService _sessionStorage;
 
         public AccountService(HttpClient httpClient,
-                              ISecurityService securityService,
                               ISessionStorageService sessionStorage)
         {
             _httpClient = httpClient;
-            _securityService = securityService;
             _sessionStorage = sessionStorage;
         }
 

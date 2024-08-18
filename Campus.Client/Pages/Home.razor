@@ -4,8 +4,8 @@
 @using Newtonsoft.Json
 @using Microsoft.JSInterop
 @inject HttpClient Http
-@inject IStudentService _studentService
 @inject IAccountService _accountService
+@inject IStudentService _studentService
 @inject IJSRuntime js
 
 <PageTitle>Available Courses</PageTitle>
@@ -94,6 +94,8 @@ else
 
     private bool IsStudentRegisteredForCourse(int courseId)
     {
+        return false;
+
         try
         {
             bool exists = studentCourses.Exists(x => x.CourseId == courseId);
