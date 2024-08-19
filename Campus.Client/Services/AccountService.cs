@@ -50,13 +50,17 @@ namespace Campus.Client.Services
 
         public async Task<bool> IsLogedIn()
         {
-            var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
-            var authState  =await customAuthStateProvider.GetAuthenticationStateAsync();
-            var user = authState.User;
+            try
+            {
+                var customAuthStateProvider = (CustomAuthenticationStateProvider)authStateProvider;
+                var authState = await customAuthStateProvider.GetAuthenticationStateAsync();
+                var user = authState.User;
 
-            bool isLoggedIn = user.Identity != null && user.Identity.IsAuthenticated;
+                bool isLoggedIn = user.Identity != null && user.Identity.IsAuthenticated;
 
-            return isLoggedIn;
+                return isLoggedIn;
+            }
+            catch { return false; }
         }
 
         public async Task<UserSessionModel> GetUserSessionModel()

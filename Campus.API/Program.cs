@@ -49,13 +49,26 @@ services.AddAuthentication(x =>
         OnTokenValidated = context =>
         {
             var studentRepository = context.HttpContext.RequestServices.GetRequiredService<IStudentRepository>();
-            var studentId = int.Parse(context.Principal.Identity.Name);
-            var student = studentRepository.GetById(studentId);
-            if (student == null)
+            var studentId = context.Principal.Identity.Name;
+            
+            if(studentId is not null)
             {
-                // return unauthorized if user no longer exists
+                Guid id = Guid.Empty;
+                Guid.TryParse(studentId, out id);
+
+                var student = studentRepository.GetById(id);
+                if (student == null)
+                {
+                    // return unauthorized if user no longer exists
+                    context.Fail("Unauthorized");
+                }
+            }
+            else
+            {
                 context.Fail("Unauthorized");
             }
+
+            
             return Task.CompletedTask;
         }
     };

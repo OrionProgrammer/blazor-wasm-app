@@ -54,6 +54,8 @@ else
 </div>
 }
 
+@error
+
 @code {
     private List<CourseModel>? courseModels;
     private List<StudentCourseModel>? studentCourses;
@@ -63,13 +65,13 @@ else
     {
         try
         {
-            //await GetStudentCourses();
+            await GetStudentCourses();
             await LoadAllCourses();
 
         }
         catch(Exception ex)
         {
-            error = ex.Message;
+            error = ex.StackTrace.ToString();
         }
     }
 
@@ -78,6 +80,8 @@ else
         var response = await Http.GetAsync("Course");
         var returnValue = await response.Content.ReadAsStringAsync();
         courseModels = JsonConvert.DeserializeObject<List<CourseModel>?>(returnValue);
+            
+        StateHasChanged();
     }
 
     private async Task GetStudentCourses()
@@ -94,15 +98,6 @@ else
 
     private bool IsStudentRegisteredForCourse(int courseId)
     {
-        return false;
-
-        try
-        {
-            bool exists = studentCourses.Exists(x => x.CourseId == courseId);
-        }
-        catch
-        {}
-
         return studentCourses is { } ? studentCourses.Exists(x => x.CourseId == courseId) : false;
     }
 

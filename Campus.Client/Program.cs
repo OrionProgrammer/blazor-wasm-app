@@ -17,8 +17,8 @@ builder.RootComponents.Add<HeadOutlet>("head::after");
 var Settingws = builder.Configuration.GetSection("Settings");
 builder.Services.AddScoped(sp => new HttpClient
 {
-    //BaseAddress = new Uri("http://localhost:5292/api/")
-    BaseAddress = new Uri(Settingws["APIUrl"])
+    BaseAddress = new Uri("http://localhost:5292/api/")
+    //BaseAddress = new Uri(Settingws["APIUrl"])
 });
 
 //builder.Services.AddHttpClient("BaseHttp", httpClient =>

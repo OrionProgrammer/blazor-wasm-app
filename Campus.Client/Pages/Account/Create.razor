@@ -37,18 +37,11 @@
     <div class="form-group row mb-4">
         <label for="password" class="col-md-2 col-form-label">Password</label>
         <div class="col-md-5">
-            <InputText type="password" id="password" class="form-control" @bind-Value="studentModel!.Password" />
+            <InputText id="password" class="form-control" @bind-Value="studentModel!.Password" />
             <ValidationMessage For="@(() => studentModel.Password)" />
         </div>
     </div>
 
-    <div class="form-group row mb-4">
-        <label for="confirmpassword" class="col-md-2 col-form-label">Confirm Password</label>
-        <div class="col-md-5">
-            <InputText type="password" id="confirmpassword" class="form-control" @bind-Value="studentModel!.ConfirmPassword" />
-            <ValidationMessage For="@(() => studentModel.ConfirmPassword)" />
-        </div>
-    </div>
 
     <div class="row">
         <div class="col-md-2"></div>
